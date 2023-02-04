@@ -10,4 +10,4 @@ https://typescript-kr.github.io/
 
 npm i -g typescript
 
-npm 1 -g ts-node
+npm i -g ts-node
