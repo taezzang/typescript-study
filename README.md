@@ -8,6 +8,6 @@ https://typescript-kr.github.io/
 
 다른 곳에서 실행하려면 typescript 및 ts-node 라이브러리가 설치되어있어야 합니다.
 
-pnpm i -g typescript
+pnpm add typescript
 
-pnpm i -g ts-node
+pnpm add ts-node
