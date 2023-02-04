@@ -6,8 +6,4 @@ https://typescript-kr.github.io/
 
 해당 URL 참고하여 학습 진행하였습니다.
 
-다른 곳에서 실행하려면 typescript 및 ts-node 라이브러리가 설치되어있어야 합니다.
-
-npm i -g typescript
-
-npm i -g ts-node
+vscode의 code runner extension 또는 직접 명령어로 실행하기 위해선 typescript 및 ts-node 라이브러리가 설치되어있어야 합니다.
