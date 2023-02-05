@@ -88,3 +88,45 @@ unusable = null; // 성공 '--strictNullChecks' 를 사용하지 않을때만...
 // TypeScriptsms undefined과 null 둘 다 자신의 타입 이름으로 사용
 let u: undefined = undefined;
 let n: null = null; // 얘네 둘은 이거밖에 안됨
+/*
+--strictNullChecks를 사용 시 null과 undefined는 오직 any와 각자 자신들 타입에만 할당 가능(예외적으로 undefined는 void에 할당 가능)
+이건 많은 일반적인 에러를 방지하는 데 도움을 준다
+이 경우, string 또는 null 또는 undefined를 허용하고 싶은 경우 유니언 타입인 string | null | undefined 사용 가능
+*/
+
+// ※Never
+// 절대 발생할 수 없는 타입을 나타냄
+// 함수 표현식이나 화살표 함수 표현식에서 항상 오류를 발생시키거나 절대 반환하지 않는 반환 타입으로 쓰임
+// never 타입 사용 예시 ↓
+function error(message: string): never {
+    // never를 반환하는 함수는 함수의 마지막에 도달할 수 없음
+    throw new Error(message);
+}
+function fall() {
+    // 반환 타입이 never로 추론됨
+    return error('something failed');
+}
+function infiniteLoop(): never {
+    // never를 반환하는 함수는 함수의 마지막에 도달할 수 없음
+    while (true) {}
+}
+
+//※Object
+// object는 원시 타입이 아닌 타입을 나타냄 ex) number, string, boolean, bigint ... OR undefined가 아닌 나머지
+declare function create(o: object | null): void;
+create({ prop: 0 }); // 성공
+create(null); // 성공
+// create(42); // 실패
+// create('string'); // 실패
+// create(false); // 실패
+// create(undefined); // 실패
+
+// ※Type assertions (타입 단언)
+// 개발자가 내가 뭘 하고 있는지 100퍼센트 확신할 때 타입 검사 등을 따로 하지 않고 단언한 타입이라고 인지함
+// 타입 단언에는 두 가지 형태가 존재
+// angle-bracket 문법
+let someValue: any = 'this is a string';
+let strLength: number = (<string>someValue).length;
+// as 문법
+let strLength2: number = (someValue as string).length;
+// 두 가지 방법 중 선호하는 것을 선택하면 됨 (단, TypeScript와 JSX를 함께 사용할 시  as 문법만 가능)
