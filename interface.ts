@@ -60,3 +60,50 @@ ro.length = 100; // 오류!
 a = ro; // 오류!
 // ReadonlyArray를 일반 배열에 재할당이 불가능한 것을 확인 할 수 있는데 이건 타입 단언(type assertion)으로 오버라이드 가능
 a = ro as number[];
+
+// ※Excess Property Checks
+// 인터페이스의 첫 번째 예제에서 TypeScript가 { label: string; } 으로 작성해도 { size: number; label: string } 허용했음
+// 또한 선택적 프로퍼티를 배우고 'options bags'을 기술할 때 유용하다는 것을 배움
+// 하지만 그냥 둘을 결합할 시 에러가 발생할 수 있음
+// createSquare를 사용한 예제를 약간 변형하여 테스트해보자!
+
+let mySquare2 = createSquare({ colour: 'red', width: 100 });
+// createSquare의 매개변수가 colour로 전달된 것에 유의할 것, 이 경우엔 JS의 경우 조용히 오류 발생시킴
+// width 프로퍼티는 적합하지만, color 프로퍼티는 없고.. 추가 colour 프로퍼티는 중요하지 않기 때문에, 이 프로그램이 올바르다고 생각 할 수 있음
+// 하지만, TypeScript는 이 코드에 버그가 있을 수 있다고 생각함,
+// 객체 리터럴은 다른 변수에 할당 OR 인수로 전달 시 특별한 처리를 받고, 초과 프로퍼티 검사를 받는다
+// 만약 객체 리터럴이 '대상 타입(target type)'이 갖고 있지 않은 프로퍼티를 갖고 있으면, 에러 발생함
+// ex) error: Object literal may only specify known properties, but 'colour' does not exist in type 'SquareConfig'. Did you mean to write 'color'?
+
+// 이 검사를 피하는 방법은 간단함, 제일 간단한 건 타입 단언 사용
+let mySquare3 = createSquare({ width: 100, opacity: 0.5 } as SquareConfig);
+
+// 특별한 경우에, 추가 프로퍼티가 있음을 확실할 시, 문자열 인덱스 서명(string index signatuer)을 추가하는 것이 더 낫다
+interface SquareConfig2 {
+    color?: string;
+    width?: number;
+    [propName: string]: any;
+}
+function signatuerTest(config: SquareConfig2): boolean {
+    console.log(config);
+    return false;
+}
+signatuerTest({ colour: 'red', width: 100, test: 'test' }); // colour 및 test 프로퍼티를 삽입해도 오류를 표시하지 않는다!
+
+// 검사를 피하는 마지막 방법은 객체를 다른 변수에 할당하는 것
+// squareOptions가 추가 프로퍼티 검사를 받지 않기 때문에 컴파일러는 에러를 주지 않는다
+let squareOptions = { colour: 'red', width: 100 };
+let mySquare4 = createSquare(squareOptions);
+// !주의할 점
+// squareOptions 와 SquareConfig 사이에 공통 프로퍼티가 있는 경우에만 위 방법 사용 가능 ex) 여기선 width가 공통되는 중
+let squareOptions2 = { colour: 'red' };
+let mySquare5 = createSquare(squareOptions2); // 공통 프로퍼티가 존재하지않아 에러 표시 중
+
+// ※Function Types
+// 인터페이스는 JavaScript 객체가 가질 수 있는 넓은 범위의 형태를 기술할 수 있음.
+// 프로퍼티로 객체를 기술하는 것 외에, 인터페이스는 함수 타입을 설명할 수 있음
+// 인터페이스로 함수 타입을 기술하기 위해 인터페이스에 호출 서명 (call signature)를 전달함
+// 각 매개변수는 이름 및 타입이 모두 필요
+interface SearchFunc {
+    (source: string, subString: string): boolean;
+}
