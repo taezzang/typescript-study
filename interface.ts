@@ -140,7 +140,7 @@ let myStr: string = myArray[0];
 // 이 인덱스 서명은 StringArray가 number로 색인화(indexed)되면 string을 반환할 것을 나타냄
 
 // 인덱스 서명을 지원하는 타입에는 두 가지가 있다: 문자열과 숫자.
-// 두 타입의 인덱서를 모두 지우너하는 것은 가능, 숫자 인덱서에서 반환된 타입은 반드시 문자열 인덱서에서 반환된 타입의 하위타입이어야 함
+// 두 타입의 인덱서를 모두 지원하는 것은 가능, 숫자 인덱서에서 반환된 타입은 반드시 문자열 인덱서에서 반환된 타입의 하위타입이어야 함
 // 그 이유는 number로 인덱싱할 때, Js는 실제로 객체를 인덱싱하기 전에 string으로 변환하기 때문
 // 즉, 100 (number)로 인덱싱하는 것은 "100" (string)으로 인덱싱하는 것과 같기 때문에, 서로 일관성 있어야 함
 class Animal {
@@ -151,8 +151,17 @@ class Dog extends Animal {
 }
 
 // 오류: 숫자형 문자열로 인덱싱을 하면 완전히 다른 타입의 Animal이 됨
-//'number' 인덱스 유형 'Animal'을(를) 'string' 인텍스 유형 'Dog'에 할당할 수 없습니다
 interface NotOkay {
     [x: number]: Animal;
     [x: string]: Dog;
 }
+// 문자열 인덱스 시그니처는 '사전' 패턴을 기술하는데 강력한 방법이지만, 모든 프로퍼티들이 반환 타입과 일치하도록 강제함
+// 문자열 인덱스가 obj.property 가 obj['property']로도 이용 가능함을 알려주기 때문
+// 아래 코드에선 name의 타입이 문자열 인덱스 타입과 불일치, 타입 검사는 에러를 발생시킴
+interface NumberDictionary {
+    [index: string]: number;
+    length: number; // 성공, length는 숫자
+    name: string; // 오류, `name`의 타입은 인덱서의 하위타입이 아님
+}
+
+// ! 인덱서블 타입은 이해가 좀 힘들다 추가로 계속 공부하자
