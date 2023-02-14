@@ -155,6 +155,9 @@ interface NotOkay {
     [x: number]: Animal;
     [x: string]: Dog;
 }
+// Dog는 Animal을 할당받고 breed를 추가하는 데 NotOkay 인터페이스의 인덱싱에선 Animal은 'number'형, Dog는 'string'형으로 들어감
+// 따라서 'number'형 Animal은 'string'형 Dog에게 할당할 수 없음
+
 // 문자열 인덱스 시그니처는 '사전' 패턴을 기술하는데 강력한 방법이지만, 모든 프로퍼티들이 반환 타입과 일치하도록 강제함
 // 문자열 인덱스가 obj.property 가 obj['property']로도 이용 가능함을 알려주기 때문
 // 아래 코드에선 name의 타입이 문자열 인덱스 타입과 불일치, 타입 검사는 에러를 발생시킴
@@ -163,5 +166,3 @@ interface NumberDictionary {
     length: number; // 성공, length는 숫자
     name: string; // 오류, `name`의 타입은 인덱서의 하위타입이 아님
 }
-
-// ! 인덱서블 타입은 이해가 좀 힘들다 추가로 계속 공부하자
