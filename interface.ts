@@ -152,11 +152,16 @@ class Dog extends Animal {
 
 // 오류: 숫자형 문자열로 인덱싱을 하면 완전히 다른 타입의 Animal이 됨
 interface NotOkay {
-    [x: number]: Animal;
+    [x: number]: Animal; // array[1] 로 불러와도 Js에선 array["1"]로 해당 값을 가져오기 때문에 숫자 인덱서의 반환 타입은 꼭!! 문자 인덱서의 반환 타입의 하위여야 함
     [x: string]: Dog;
 }
-// Dog는 Animal을 할당받고 breed를 추가하는 데 NotOkay 인터페이스의 인덱싱에선 Animal은 'number'형, Dog는 'string'형으로 들어감
-// 따라서 'number'형 Animal은 'string'형 Dog에게 할당할 수 없음
+// ! 위 예제에선 숫자 인덱서로 반환된 타입인 Animal이 문자열 인덱서에 반환된 Dog 타입의 하위 타입이 아니기 때문에 에러가 난다
+// 위의 NotOkay에서 오류만 없애기 위해선 Dog가 Animal의 하위가 아닌 Animal이 Dog을 상속받기 OR 숫자 인덱서의 반환 타입이 Dog여야 한다.
+interface isOkay {
+    [x: number]: Dog;
+    [x: string]: Animal;
+    //
+}
 
 // 문자열 인덱스 시그니처는 '사전' 패턴을 기술하는데 강력한 방법이지만, 모든 프로퍼티들이 반환 타입과 일치하도록 강제함
 // 문자열 인덱스가 obj.property 가 obj['property']로도 이용 가능함을 알려주기 때문
