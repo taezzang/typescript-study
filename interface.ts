@@ -160,7 +160,6 @@ interface NotOkay {
 interface isOkay {
     [x: number]: Dog;
     [x: string]: Animal;
-    //
 }
 
 // 문자열 인덱스 시그니처는 '사전' 패턴을 기술하는데 강력한 방법이지만, 모든 프로퍼티들이 반환 타입과 일치하도록 강제함
@@ -170,4 +169,45 @@ interface NumberDictionary {
     [index: string]: number;
     length: number; // 성공, length는 숫자
     name: string; // 오류, `name`의 타입은 인덱서의 하위타입이 아님
+}
+
+// 인덱스 시그니처가 프로퍼티 타입들의 합집합이며냐 다른 타입 프로퍼티도 허용 가능!
+interface NumberOrStringDictionary {
+    [index: string]: number | string;
+    length: number;
+    name: string;
+}
+
+// 인덱스 할당을 막기 위해 인덱스 시그니처를 읽기 전용으로 만들기도 가능
+interface ReadonlyStringArray {
+    readonly [index: number]: string;
+}
+let myArray2: ReadonlyStringArray = ['Alice', 'Bob'];
+myArray2[2] = 'Mallory'; // 오류! readonly 이므로 값 할당 불가
+
+// ※클래스 타입
+
+// - Implementing an interface
+// 클래스가 특정 계약을 충족시키도록 명
+interface ClockInterface {
+    currentTime: Date;
+    setTime(d: Date): void; // 구현된 메소드를 인터페이스 안에서도 기술 가능
+}
+
+class Clock implements ClockInterface {
+    currentTime: Date = new Date();
+    setTime(d: Date) {
+        this.currentTime = d;
+    }
+    constructor(h: number, m: number) {}
+}
+// ! 인터페이스는 클래스의 public과 private 모두보다는, public을 기술함
+// 그래서 클래스 인스턴스의 private에서는 특정 타입이 있는 지 검사 불가
+interface ClockConstructor {
+    new (hour: number, minute: number);
+}
+
+class Clock2 implements ClockConstructor {
+    currentTime: Date;
+    constructor(h: number, m: number) {}
 }
