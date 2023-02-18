@@ -203,6 +203,10 @@ class Clock implements ClockInterface {
 }
 // ! 인터페이스는 클래스의 public과 private 모두보다는, public을 기술함
 // 그래서 클래스 인스턴스의 private에서는 특정 타입이 있는 지 검사 불가
+
+// - Difference between the static and instance sides of classes
+// 클래스의 인터페이스를 다룰 때, 두 가지 타입을 가진다는 것을 인지하면 좋다. (스태틱 타입과 인스턴스 타입)
+// 생성 시그니처 (construct signature)로 인터페이스를 생성하고, 클래스를 생성하려고 하면 인터페이스를 implements 할 때 에러가 발생함
 interface ClockConstructor {
     new (hour: number, minute: number);
 }
@@ -211,3 +215,36 @@ class Clock2 implements ClockConstructor {
     currentTime: Date;
     constructor(h: number, m: number) {}
 }
+// Clock2 클래스에서 new (hour: number, minute: number) 생성자에 대한 구현을 하고 있어서 오류가 남
+// ! 클래스가 인터페이스를 implements 할 때, 클래스의 인스턴스만 검사하기 때문에 생성자는 스태틱이라 해당 검사에 포함되지 않음
+
+// 대신, 클래스의 스태틱 부분을 직접적으로 다룰 필요가 있다.
+// 아래 예제에선 ClockConstructor2는 생성자 정의, ClockInterface2는 인스턴스 메소드를 정의
+interface ClockConstructor2 {
+    new (hour: number, minute: number): ClockInterface2;
+}
+interface ClockInterface2 {
+    tick(): void;
+}
+
+function createClock(ctor: ClockConstructor2, hour: number, minute: number): ClockInterface2 {
+    return new ctor(hour, minute);
+}
+
+class DigitalClock implements ClockInterface2 {
+    constructor(h: number, m: number) {} // ClockConstructor2의 생성자 시그니처에 해당됨
+    tick() {
+        // ClockInterface2를 구현해야 하므로 tick 메소드 구현
+        console.log('beep beep');
+    }
+}
+// DigitalClock과 같은 방식
+class AnalogClock implements ClockInterface2 {
+    constructor(h: number, m: number) {}
+    tick() {
+        console.log('tick tock');
+    }
+}
+
+let digital = createClock(DigitalClock, 12, 17);
+let analog = createClock(AnalogClock, 7, 32);
