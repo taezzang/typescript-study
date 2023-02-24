@@ -248,3 +248,48 @@ class AnalogClock implements ClockInterface2 {
 
 let digital = createClock(DigitalClock, 12, 17);
 let analog = createClock(AnalogClock, 7, 32);
+
+// 다른 방식은 클래스 표현을 사용
+// interface ClockConstructor {
+//     new (hour: number, minute: number);
+// }
+
+// interface ClockInterface {
+//     tick();
+// }
+
+// const Clock: ClockConstructor = class Clock implements ClockInterface {
+//     constructor(h: number, m: number) {}
+//     tick() {
+//         console.log('beep beep');
+//     }
+// };
+
+// ※Extending Interfaces 인터페이스 확장
+// 클래스처럼 인터페이스도 확장이 가능함
+// 인터페이스 멤버를 다른 인터페이스에 복사하는 것이 가능해짐
+// 인터페이스를 재사용성 높은 컴포넌트로 쪼갤 때, 유연함 제공
+interface Shape {
+    color: string;
+}
+interface Square extends Shape {
+    sideLength: number;
+}
+let square = {} as Square;
+square.color = 'blue';
+square.sideLength = 10;
+
+// 다수의 인터페이스도 확장이 가능하다!
+interface PenStroke {
+    // 새 인터페이스 추가!
+    penWidth: number;
+}
+
+interface Square2 extends Shape, PenStroke {
+    // 두 개의 인터페이스를 확장한다
+    sideLength: number;
+}
+let square2 = {} as Square2;
+square2.color = 'blue';
+square2.sideLength = 10;
+square2.penWidth = 5.0;
