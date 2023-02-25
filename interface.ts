@@ -293,3 +293,27 @@ let square2 = {} as Square2;
 square2.color = 'blue';
 square2.sideLength = 10;
 square2.penWidth = 5.0;
+
+// Hybrid Types
+// Js의 동적이고 유연한 특성 대문에, 위에서 설명했던 몇몇 타입의 조합으로 동작하는 객체를 가끔 마주할 수 있음
+// 그런 예 중 하나는 추가적인 프로퍼티와 함께, 함수와 객체 역할 모두 수행하는 객체
+// 써드파티 (3rd-party) JavaScript와 상호작용할 때, 타입의 형태를 완전히 기술하기 위해 위와 같은 패턴을 사용해야할 수도 있음
+interface Counter {
+    // 이해는 잘 안가지만 첨봤을 땐 일단 class와 비슷하다고 이해 중
+    (start: number): string;
+    interval: number;
+    reset(): void;
+}
+function getCounter(): Counter {
+    let counter = function (start: number) {
+        console.log(start);
+        return 'test';
+    } as Counter;
+    counter.interval = 123;
+    counter.reset = function () {};
+    return counter;
+}
+let c = getCounter();
+console.log(c(10));
+c.reset();
+c.interval = 5.0;
