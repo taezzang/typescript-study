@@ -294,7 +294,7 @@ square2.color = 'blue';
 square2.sideLength = 10;
 square2.penWidth = 5.0;
 
-// Hybrid Types
+// ※Hybrid Types
 // Js의 동적이고 유연한 특성 대문에, 위에서 설명했던 몇몇 타입의 조합으로 동작하는 객체를 가끔 마주할 수 있음
 // 그런 예 중 하나는 추가적인 프로퍼티와 함께, 함수와 객체 역할 모두 수행하는 객체
 // 써드파티 (3rd-party) JavaScript와 상호작용할 때, 타입의 형태를 완전히 기술하기 위해 위와 같은 패턴을 사용해야할 수도 있음
@@ -317,3 +317,29 @@ let c = getCounter();
 console.log(c(10));
 c.reset();
 c.interval = 5.0;
+
+// ※클래스를 확장한 인터페이스 (Interfaces Extending Classes)
+// 인터페이스 타입이 클래스 타입을 확장하면, 클래스의 멤버는 상속, 구현은 상속받지 않음
+// 인터페이스가 구현을 제공하지 않고, 클래스의 멤버 모두를 선언한 것과 동일, 심지어 기초 클래스의 private과 protected 멤버도 상속 받음
+// 이건 인터페이스가 private 혹은 protedted 멤버를 포함한 클래스를 확장할 수 있다는 뜻이며 인터페이스 타입은 그 클래스나 하위클래스에 의해서만 구현 가능
+class Control {
+    private state: any;
+}
+
+interface SelectableControl extends Control {
+    select(): void;
+}
+
+class Button extends Control implements SelectableControl {
+    select() {}
+}
+
+class TextBox extends Control {
+    select() {}
+}
+
+// Control 클래스거나 하위 클래스가 아니라서 private state 멤버를 구현할 수 가 없음!
+class Image implements SelectableControl {
+    private state: any;
+    select() {}
+}
