@@ -48,3 +48,39 @@ let myAdd4: (baseValue: number, increment: number) => number = function (x: numb
 // 두 번째로 반환타입. 매개변수 타입들과 반환 타입 사이에 '화살표 표기'( => )를 써서 반환 타입을 분명히 할 수 있음
 // 함수 표기에 필요한 부분들이며 만약 함수가 값을 반환하지 않는다면 비워두는 대신 void를 써서 표시 함
 // 매개변수 타입과 반환 타입만이 함수 타입을 구성, 캡처된 변수는 타입에 반영되지 않으며 사실상 캡처된 변수는 함수의 '숨겨진 상태'의 일부이고 API 구성하지 않음
+
+// -타입의 추론
+// 위 myAdd2는 전체 함수 타입을 가진다.
+// 위 myAdd4의 매개변수 x와 y는 number 타입을 가진다.
+// 이러한 타입 추론 형태를 'contextual typing' 이라 부름
+
+// ※선택적 매개변수와 기본 매개변수 (Optional and Default Parameter)
+// 함수에 주어진 인자의 수는 함수가 기대하는 매개변수의 수와 일치해야 함
+function buildName(firstName: string, lastName: string) {
+    return firstName + ' ' + lastName;
+}
+let result1 = buildName('Bob'); // 오류, 너무 적은 매개변수
+let result2 = buildName('Bob', 'Adams', 'Sr.'); // 오류, 너무 많은 매개변수
+let result3 = buildName('Bob', 'Adams'); // 정확함
+
+// 선택적 매개변수를 원한다면 매개변수 이름 끝에 ? 를 붙임으로써 해결 가능
+function buildName2(firstName: string, lastName?: string) {
+    if (lastName) return firstName + ' ' + lastName;
+    else return firstName;
+}
+
+let result4 = buildName2('Bob'); // 지금은 바르게 동작 (lastName은 선택적 매개변수이므로)
+let result5 = buildName2('Bob', 'Adams', 'Sr.'); // 오류, 너무 많은 매개변수
+let result6 = buildName2('Bob', 'Adams'); // 정확함
+
+// 유저가 값을 제공하지 않거나 undefined로 했을 때에 할당될 매개변수의 값을 미리 세팅 가능
+// 이것을 '기본-초기화 매개변수' 라고 함
+function buildName3(firstName: string, lastName = 'Smith') {
+    return firstName + ' ' + lastName;
+}
+
+let result7 = buildName3('Bob'); // 올바르게 동작, "Bob Smith" 반환
+let result8 = buildName3('Bob', undefined); // 여전히 동작, 역시 "Bob Smith" 반환
+let result9 = buildName3('Bob', 'Adams', 'Sr.'); // 오류, 너무 많은 매개변수
+let result10 = buildName3('Bob', 'Adams'); // 정확함
+// 모든 필드 매개변수 뒤에 오는 '기본-초기화 매개변수'는 선택적으로 처리되며, 함수 호출 시 생략 가능함ㄴ
