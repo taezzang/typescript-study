@@ -76,6 +76,7 @@ let result6 = buildName2('Bob', 'Adams'); // 정확함
 // 유저가 값을 제공하지 않거나 undefined로 했을 때에 할당될 매개변수의 값을 미리 세팅 가능
 // 이것을 '기본-초기화 매개변수' 라고 함
 function buildName3(firstName: string, lastName = 'Smith') {
+    // lastName만 기본-초기화 매개변수인 것 firstName은 buildName2와 같이 필수로 입력해야 함!
     return firstName + ' ' + lastName;
 }
 
@@ -83,4 +84,4 @@ let result7 = buildName3('Bob'); // 올바르게 동작, "Bob Smith" 반환
 let result8 = buildName3('Bob', undefined); // 여전히 동작, 역시 "Bob Smith" 반환
 let result9 = buildName3('Bob', 'Adams', 'Sr.'); // 오류, 너무 많은 매개변수
 let result10 = buildName3('Bob', 'Adams'); // 정확함
-// 모든 필드 매개변수 뒤에 오는 '기본-초기화 매개변수'는 선택적으로 처리되며, 함수 호출 시 생략 가능함ㄴ
+// 모든 필드 매개변수 뒤에 오는 '기본-초기화 매개변수'는 선택적으로 처리되며, 함수 호출 시 생략 가능함
