@@ -5,7 +5,7 @@
     코드 안의 계약을 정의 및 프로젝트 외부에서 사용하는 코드의 계약을 정의하는 강력한 방법
 */
 
-// ※First Interface (첫번째 예제)
+// ※First Interface (첫번째 인터페이스)
 // 함수에 전달된 객체가 나열된 요구 조건을 충족하면, 허용됨
 interface LabeledValue {
     label: string;
@@ -16,7 +16,7 @@ function printLabel(labeledObj: LabeledValue) {
 let myObj = { size: 10, label: 'Size 10 Object' };
 printLabel(myObj); // myObj엔 LabeledValue에서 명시한 label 프로퍼티가 들어가 있으므로 검사에 통과함
 
-// ※Optional Properties
+// ※Optional Properties (선택적 프로퍼티)
 // 인터페이스의 모든 프로퍼티가 필요한 것은 아님, 특정 조건에만 존재 or 아예 없음
 // 객체 안의 몇 개의 프로퍼티만 채워 함수에 전달하는 `option bags` 같은 패턴 만들 시 유용
 interface SquareConfig {
@@ -41,7 +41,7 @@ function createSquare(config: SquareConfig): { color: string; area: number } {
 let mySquare = createSquare({ color: 'black' });
 console.log(mySquare);
 
-// ※Readonly Properties
+// ※Readonly Properties (읽기전용 프로퍼티)
 // 일부 프로퍼티들은 객체가 처음 생성될 때만 수정 가능해야 함
 // 그럴 땐 프로퍼티 이름 앞에 readonly를 넣어서 지정 가능
 interface Point {
@@ -61,7 +61,7 @@ a = ro; // 오류!
 // ReadonlyArray를 일반 배열에 재할당이 불가능한 것을 확인 할 수 있는데 이건 타입 단언(type assertion)으로 오버라이드 가능
 a = ro as number[];
 
-// ※Excess Property Checks
+// ※Excess Property Checks (초과 프로퍼티 검사)
 // 인터페이스의 첫 번째 예제에서 TypeScript가 { label: string; } 으로 작성해도 { size: number; label: string } 허용했음
 // 또한 선택적 프로퍼티를 배우고 'options bags'을 기술할 때 유용하다는 것을 배움
 // 하지만 그냥 둘을 결합할 시 에러가 발생할 수 있음
@@ -99,7 +99,7 @@ let mySquare4 = createSquare(squareOptions);
 let squareOptions2 = { colour: 'red' };
 let mySquare5 = createSquare(squareOptions2); // 공통 프로퍼티가 존재하지않아 에러 표시 중
 
-// ※Function Types
+// ※Function Types (함수 타입)
 // 인터페이스는 JavaScript 객체가 가질 수 있는 넓은 범위의 형태를 기술할 수 있음.
 // 프로퍼티로 객체를 기술하는 것 외에, 인터페이스는 함수 타입을 설명할 수 있음
 // 인터페이스로 함수 타입을 기술하기 위해 인터페이스에 호출 서명 (call signature)를 전달함
@@ -125,7 +125,7 @@ mySearch2 = function (src, sub) {
 };
 // 함수 표현식이 숫자 나 문자열을 반환했다면, 타입 검사는 반환 타입이 SearchFunc 인터페이스에 정의된 반환 타입과 일치하지 않는다는 에러를 발생시킴
 
-// ※Indexable Types
+// ※Indexable Types (인덱서블 타입)
 // 인터페이스로 함수 타입을 설명하는 방법과 유사하게 a[10] 이나 ageMap["daniel"] 처럼 타입을 인덱스로 기술할 수 있음
 // 인덱서블 타입은 인덱싱 시 해당 반환 유형과 함께 객체를 인덱싱하는데 사용할 수 있는 타입을 기술하는 인덱스 시그니쳐를 가짐
 interface stringArray {
@@ -185,9 +185,9 @@ interface ReadonlyStringArray {
 let myArray2: ReadonlyStringArray = ['Alice', 'Bob'];
 myArray2[2] = 'Mallory'; // 오류! readonly 이므로 값 할당 불가
 
-// ※클래스 타입
+// ※Class Types (클래스 타입)
 
-// - Implementing an interface
+// - Implementing an interface (인터페이스 구현하기)
 // 클래스가 특정 계약을 충족시키도록 명
 interface ClockInterface {
     currentTime: Date;
@@ -204,7 +204,7 @@ class Clock implements ClockInterface {
 // ! 인터페이스는 클래스의 public과 private 모두보다는, public을 기술함
 // 그래서 클래스 인스턴스의 private에서는 특정 타입이 있는 지 검사 불가
 
-// - Difference between the static and instance sides of classes
+// - Difference between the static and instance sides of classes (클래스의 스태틱과 인스턴스의 차이점)
 // 클래스의 인터페이스를 다룰 때, 두 가지 타입을 가진다는 것을 인지하면 좋다. (스태틱 타입과 인스턴스 타입)
 // 생성 시그니처 (construct signature)로 인터페이스를 생성하고, 클래스를 생성하려고 하면 인터페이스를 implements 할 때 에러가 발생함
 interface ClockConstructor {
@@ -265,7 +265,7 @@ let analog = createClock(AnalogClock, 7, 32);
 //     }
 // };
 
-// ※Extending Interfaces 인터페이스 확장
+// ※Extending Interfaces (인터페이스 확장)
 // 클래스처럼 인터페이스도 확장이 가능함
 // 인터페이스 멤버를 다른 인터페이스에 복사하는 것이 가능해짐
 // 인터페이스를 재사용성 높은 컴포넌트로 쪼갤 때, 유연함 제공
@@ -294,7 +294,7 @@ square2.color = 'blue';
 square2.sideLength = 10;
 square2.penWidth = 5.0;
 
-// ※Hybrid Types
+// ※Hybrid Types (하이브리드 타입)
 // Js의 동적이고 유연한 특성 대문에, 위에서 설명했던 몇몇 타입의 조합으로 동작하는 객체를 가끔 마주할 수 있음
 // 그런 예 중 하나는 추가적인 프로퍼티와 함께, 함수와 객체 역할 모두 수행하는 객체
 // 써드파티 (3rd-party) JavaScript와 상호작용할 때, 타입의 형태를 완전히 기술하기 위해 위와 같은 패턴을 사용해야할 수도 있음
@@ -318,7 +318,7 @@ console.log(c(10));
 c.reset();
 c.interval = 5.0;
 
-// ※클래스를 확장한 인터페이스 (Interfaces Extending Classes)
+// ※Interfaces Extending Classes (클래스를 확장한 인터페이스)
 // 인터페이스 타입이 클래스 타입을 확장하면, 클래스의 멤버는 상속, 구현은 상속받지 않음
 // 인터페이스가 구현을 제공하지 않고, 클래스의 멤버 모두를 선언한 것과 동일, 심지어 기초 클래스의 private과 protected 멤버도 상속 받음
 // 이건 인터페이스가 private 혹은 protedted 멤버를 포함한 클래스를 확장할 수 있다는 뜻이며 인터페이스 타입은 그 클래스나 하위클래스에 의해서만 구현 가능
