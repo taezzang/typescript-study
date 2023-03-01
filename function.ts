@@ -4,7 +4,7 @@
  TypeScript에서는 표준 JavaScript 함수가 작업을 수월하게 하도록 몇 가지 새로운 기능을 추가
 */
 
-// ※Function
+// ※Function (함수)
 // TypeScript 함수는 JavaScript와 마찬가지로 기명 함수(named function)과 익명 함수(anonymous function)로 생성 가능
 // 기명 함수
 function add(x, y) {
@@ -20,9 +20,9 @@ function addToZ(x, y) {
     return x + y + z;
 }
 
-// ※Function Types
+// ※Function Types (함수 타입)
 
-// -함수의 타이핑(Typing the function)
+// -Typing the function (함수의 타이핑)
 // 이전에 사용했던 예시에 타입을 더해보자
 function add2(x: number, y: number): number {
     return x + y;
@@ -33,7 +33,7 @@ let myAdd2 = function (x: number, y: number): number {
 // 각 파라미터와 함수 자신의 반환될 타입을 정해줄 수 있음
 // TypeScript는 반환 문을 보고 반환 타입을 파악할 수 있으므로 반환 타입을 생략할 수 있음
 
-// -함수 타입 작성하기 (Writing the function type)
+// -Writing the function type (함수 타입 작성하기)
 // 합수 타입들을 살펴보고 함수의 전체 타입 작성하기
 let myAdd3: (x: number, y: number) => number = function (x: number, y: number): number {
     return x + y;
@@ -49,7 +49,7 @@ let myAdd4: (baseValue: number, increment: number) => number = function (x: numb
 // 함수 표기에 필요한 부분들이며 만약 함수가 값을 반환하지 않는다면 비워두는 대신 void를 써서 표시 함
 // 매개변수 타입과 반환 타입만이 함수 타입을 구성, 캡처된 변수는 타입에 반영되지 않으며 사실상 캡처된 변수는 함수의 '숨겨진 상태'의 일부이고 API 구성하지 않음
 
-// -타입의 추론
+// -Inferring the types (타입의 추론)
 // 위 myAdd2는 전체 함수 타입을 가진다.
 // 위 myAdd4의 매개변수 x와 y는 number 타입을 가진다.
 // 이러한 타입 추론 형태를 'contextual typing' 이라 부름
