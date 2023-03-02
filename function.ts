@@ -85,3 +85,14 @@ let result8 = buildName3('Bob', undefined); // 여전히 동작, 역시 "Bob Smi
 let result9 = buildName3('Bob', 'Adams', 'Sr.'); // 오류, 너무 많은 매개변수
 let result10 = buildName3('Bob', 'Adams'); // 정확함
 // 모든 필드 매개변수 뒤에 오는 '기본-초기화 매개변수'는 선택적으로 처리되며, 함수 호출 시 생략 가능함
+
+// 순수한 선택적 매개변수와 다르게 기본-초기화 매개변수는 필수 매개변수 뒤에 오는 것이 강요되지 않음
+// 만약 기본-초기화 매개변수가 필수 매개변수보다 앞에 오게 된다면 사용자가 명시적으로 undefined 전달해주어야 기본-초기화 매개변수 볼 수 있음
+function buildName4(firstName = 'Will', lastName: string) {
+    return firstName + ' ' + lastName;
+}
+
+let result11 = buildName4('Bob'); // 오류, 매개변수 수가 적음
+let result12 = buildName4('Bob', 'Adams', 'Sr.'); // 오류, 매개변수 수가 많음
+let result13 = buildName4('Bob', 'Adams'); // 성공, "Bob Adams" 반환
+let result14 = buildName4(undefined, 'Adams'); // 성공, "Will Adams" 반환
