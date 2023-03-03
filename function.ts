@@ -96,3 +96,23 @@ let result11 = buildName4('Bob'); // 오류, 매개변수 수가 적음
 let result12 = buildName4('Bob', 'Adams', 'Sr.'); // 오류, 매개변수 수가 많음
 let result13 = buildName4('Bob', 'Adams'); // 성공, "Bob Adams" 반환
 let result14 = buildName4(undefined, 'Adams'); // 성공, "Will Adams" 반환
+
+// ※나머지 매개변수 (Rest Parameter)
+// 필수, 선택적, 기본 매개변수는 한 번에 하나의 매개변수만을 가지고 이야기 함
+// Js에서는 모든 함수 내부에 위치한 arguments라는 변수를 사용해 직접 인자를 가지고 작업 가능
+// TS에서는 이 인자들을 하나의 변수로 모을 수 있음
+function buildName5(firstName: string, ...restOfName: string[]) {
+    return firstName + ' ' + restOfName.join(' ');
+}
+
+// employeeName 은 "Joseph Samuel Lucas MacKinzie" 가 될것입니다.
+let employeeName = buildName5('Joseph', 'Samuel', 'Lucas', 'MacKinzie');
+
+// 나머지 매개변수는 선택적 매개변수들의 수를 무한으로 취급함
+// 나머지 매개변수로 인자들을 넘겨줄 땐 원하는 만큼 넘기기 가능 (아무것도 안넘길 수 도 있다!)
+// 컴파일러는 생략 부호(...) 뒤의 이름으로 전달된 인자 배열을 빌드하여 함수에서 사용할 수 있도록 함
+function buildName6(firstName: string, ...restOfName: string[]) {
+    return firstName + ' ' + restOfName.join(' ');
+}
+
+let buildNameFun: (fname: string, ...rest: string[]) => string = buildName6;
