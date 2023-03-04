@@ -116,3 +116,50 @@ function buildName6(firstName: string, ...restOfName: string[]) {
 }
 
 let buildNameFun: (fname: string, ...rest: string[]) => string = buildName6;
+
+// ※this
+// TypeScript는 몇 가지 기술들로 잘못된 this 사용을 잡아낼 수 있음
+
+// -this와 화살표 함수 (this and arrow functions)
+// JS에서, this는 함수가 호출될 때 정해지는 변수, 매우 강력하고 유연한 기능이지만 항상 함수가 실행되는 콘텐스트에 대해 알아햐 함
+let deck = {
+    suits: ['hearts', 'spades', 'clubs', 'diamonds'],
+    cards: Array(52),
+    createCardPicker: function () {
+        return function () {
+            let pickedCard = Math.floor(Math.random() * 52);
+            let pickedSuit = Math.floor(pickedCard / 13);
+
+            return { suit: this.suits[pickedSuit], card: pickedCard % 13 }; // deck 객체의 suits가 아닌 window의 suits를 참조하게 됨
+        };
+    },
+};
+
+let cardPicker = deck.createCardPicker();
+let pickedCard = cardPicker();
+
+console.log('card: ' + pickedCard.card + ' of ' + pickedCard.suit);
+// 위 예시에선 createCardPicker가 자기 자신을 반환하는 함수임을 주목하자.
+// 기대했던 로그 대신 오류가 뜨게 되는데 이유는 createCardPicker에 의해 생성된 함수에서 사용중인 this가 deck객체가 아닌 window로 설정되었기 때문
+// cardPicker()의 자체적인 호출 때문에 생긴 일, 최상위 레벨에서의 비-메서드 문법의 호출은 this를 window로 함 (strict mode에선 this가 undefined로 됨)
+
+// 해당 문제는 함수 반환 전 바인딩을 알맞게 하는 것으로 해결 가능
+// 함수 표현식을 ES6 화살표 함수로 바꾸자, 화살표 함수는 함수가 호출된 곳이 아닌 함수가 생성된 쪽의 this를 캡처함
+let deck2 = {
+    suits: ['hearts', 'spades', 'clubs', 'diamonds'],
+    cards: Array(52),
+    createCardPicker: function () {
+        // 아랫줄은 화살표 함수로써, 'this'를 이곳에서 캡처할 수 있도록 함
+        return () => {
+            let pickedCard = Math.floor(Math.random() * 52);
+            let pickedSuit = Math.floor(pickedCard / 13);
+
+            return { suit: this.suits[pickedSuit], card: pickedCard % 13 };
+        };
+    },
+};
+
+let cardPicker2 = deck2.createCardPicker();
+let pickedCard2 = cardPicker2();
+
+console.log('card: ' + pickedCard2.card + ' of ' + pickedCard2.suit); // 성공! 'card: 0 of clubs' 반환
