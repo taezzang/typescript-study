@@ -163,3 +163,39 @@ let cardPicker2 = deck2.createCardPicker();
 let pickedCard2 = cardPicker2();
 
 console.log('card: ' + pickedCard2.card + ' of ' + pickedCard2.suit); // 성공! 'card: 0 of clubs' 반환
+
+// -this 매개변수 (this parameter)
+// 위 예제에서 this.suits[pickedSuit]의 타입은 any, this가 객체 리터럴 내부의 함수(createCardPicker)에서 왔기 때문
+// 이것을 고치기 위해 명시적으로this 매개변수를 줄 수 있음, this 매개변수는 함수의 매개변수 목록에서 가장 먼저 나오는 가짜 매개변수
+function f(this: void) {
+    // 독립형 함수에서 `this`를 사용할 수 없는 것을 확인함
+}
+
+// 위 예제에서 Card와 Deck 두 가지 인터페이스 타입을 추가해 보자.
+interface Card {
+    suit: string;
+    card: number;
+}
+interface Deck {
+    suits: string[];
+    cards: number[];
+    createCardPicker(this: Deck): () => Card;
+}
+let deck3: Deck = {
+    suits: ['hearts', 'spades', 'clubs', 'diamonds'],
+    cards: Array(52),
+    // NOTE: 아래 함수는 이제 callee (arguments 객체 속성)가 반드시 Deck 타입이어야 함을 명시적으로 지정합니다.
+    createCardPicker: function (this: Deck) {
+        return () => {
+            let pickedCard = Math.floor(Math.random() * 52);
+            let pickedSuit = Math.floor(pickedCard / 13);
+
+            return { suit: this.suits[pickedSuit], card: pickedCard % 13 };
+        };
+    },
+};
+
+let cardPicker3 = deck3.createCardPicker();
+let pickedCard3 = cardPicker();
+
+alert('card: ' + pickedCard3.card + ' of ' + pickedCard3.suit);
