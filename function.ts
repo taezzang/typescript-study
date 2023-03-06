@@ -59,8 +59,8 @@ let myAdd4: (baseValue: number, increment: number) => number = function (x: numb
 function buildName(firstName: string, lastName: string) {
     return firstName + ' ' + lastName;
 }
-let result1 = buildName('Bob'); // 오류, 너무 적은 매개변수
-let result2 = buildName('Bob', 'Adams', 'Sr.'); // 오류, 너무 많은 매개변수
+// let result1 = buildName('Bob'); // 오류, 너무 적은 매개변수
+// let result2 = buildName('Bob', 'Adams', 'Sr.'); // 오류, 너무 많은 매개변수
 let result3 = buildName('Bob', 'Adams'); // 정확함
 
 // 선택적 매개변수를 원한다면 매개변수 이름 끝에 ? 를 붙임으로써 해결 가능
@@ -70,7 +70,7 @@ function buildName2(firstName: string, lastName?: string) {
 }
 
 let result4 = buildName2('Bob'); // 지금은 바르게 동작 (lastName은 선택적 매개변수이므로)
-let result5 = buildName2('Bob', 'Adams', 'Sr.'); // 오류, 너무 많은 매개변수
+// let result5 = buildName2('Bob', 'Adams', 'Sr.'); // 오류, 너무 많은 매개변수
 let result6 = buildName2('Bob', 'Adams'); // 정확함
 
 // 유저가 값을 제공하지 않거나 undefined로 했을 때에 할당될 매개변수의 값을 미리 세팅 가능
@@ -82,7 +82,7 @@ function buildName3(firstName: string, lastName = 'Smith') {
 
 let result7 = buildName3('Bob'); // 올바르게 동작, "Bob Smith" 반환
 let result8 = buildName3('Bob', undefined); // 여전히 동작, 역시 "Bob Smith" 반환
-let result9 = buildName3('Bob', 'Adams', 'Sr.'); // 오류, 너무 많은 매개변수
+// let result9 = buildName3('Bob', 'Adams', 'Sr.'); // 오류, 너무 많은 매개변수
 let result10 = buildName3('Bob', 'Adams'); // 정확함
 // 모든 필드 매개변수 뒤에 오는 '기본-초기화 매개변수'는 선택적으로 처리되며, 함수 호출 시 생략 가능함
 
@@ -92,8 +92,8 @@ function buildName4(firstName = 'Will', lastName: string) {
     return firstName + ' ' + lastName;
 }
 
-let result11 = buildName4('Bob'); // 오류, 매개변수 수가 적음
-let result12 = buildName4('Bob', 'Adams', 'Sr.'); // 오류, 매개변수 수가 많음
+// let result11 = buildName4('Bob'); // 오류, 매개변수 수가 적음
+// let result12 = buildName4('Bob', 'Adams', 'Sr.'); // 오류, 매개변수 수가 많음
 let result13 = buildName4('Bob', 'Adams'); // 성공, "Bob Adams" 반환
 let result14 = buildName4(undefined, 'Adams'); // 성공, "Will Adams" 반환
 
