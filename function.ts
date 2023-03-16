@@ -205,5 +205,30 @@ alert('card: ' + pickedCard3.card + ' of ' + pickedCard3.suit);
 // 라이브러리는 콜백을 일반 함수처럼 호출하므로 this는 undefined가 됨
 // 일부 작업에선 this 매개변수를 콜백 오류를 막는데 사용 가능함, 먼저 라이브러리 작성자는 콜백 타입을 this로 표시해줘야함
 interface UIElment {
-    addClickListener(onclick: (this: void, e: Event) => void): void;
+    addClickListener(onclick: (this: void) => void): void; // this: void는 addClickListener가 onclick이 this타입을 요구하지 않는 함수가 될 것으로 예상하는 것을 의미
 }
+// 호출 코드를 this로 표시하자
+class Handler {
+    constructor() {
+        this.info = 'info';
+    }
+    info: string;
+    onClickBad(this: Handler) {
+        // 이런, `this`가 여기서 쓰이는군요. 이 콜백을 쓰면 런타임에서 충돌을 일으키겠군요
+        this.info = 'bad';
+    }
+    onClickGood = () => {
+        this.info = 'good';
+    };
+}
+let uiElement: UIElment;
+uiElement = {
+    // uiElement 객체 만들기
+    addClickListener: (onclick: () => void): void => {
+        onclick();
+    },
+};
+let h = new Handler();
+// uiElement.addClickListener(h.onClickBad); // 오류! [시그니처 형식이 호환되지 않음 - void와 Handler..]
+uiElement.addClickListener(h.onClickGood); // 성공!
+console.log(h.info); // 'good' 출력!
